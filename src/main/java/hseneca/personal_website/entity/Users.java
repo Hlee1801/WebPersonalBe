@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.time.ZonedDateTime;
+
 @Entity
 @Data
 public class Users {
@@ -16,4 +18,7 @@ public class Users {
     private String userName;
     private Integer age;
     private String school;
+
+    private ZonedDateTime createAt;
+    private ZonedDateTime updateAt;
 }

@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.time.ZonedDateTime;
+
 @Entity
 @Data
 public class TechnicalSkill {
@@ -14,4 +16,7 @@ public class TechnicalSkill {
     private Integer techSkillId;
     private String techSkillName;
     private String type;
+
+    private ZonedDateTime createAt;
+    private ZonedDateTime updateAt;
 }

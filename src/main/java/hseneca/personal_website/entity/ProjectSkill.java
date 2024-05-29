@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.time.ZonedDateTime;
+
 @Entity
 @Data
 public class ProjectSkill {
@@ -13,4 +15,7 @@ public class ProjectSkill {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer projectSkillId;
     private String techStackType;
+
+    private ZonedDateTime createAt;
+    private ZonedDateTime updateAt;
 }

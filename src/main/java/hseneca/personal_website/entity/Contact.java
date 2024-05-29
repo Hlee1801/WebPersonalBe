@@ -6,6 +6,8 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.time.ZonedDateTime;
+
 @Entity
 @Data
 public class Contact {
@@ -18,4 +20,7 @@ public class Contact {
     private String facebook;
     private String linkedIn;
     private String phoneNumber;
+
+    private ZonedDateTime createAt;
+    private ZonedDateTime updateAt;
 }
