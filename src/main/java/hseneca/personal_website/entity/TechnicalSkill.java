@@ -8,7 +8,7 @@ import lombok.Data;
 
 import java.time.ZonedDateTime;
 
-@Entity
+@Entity(name = "technical_skill")
 @Data
 public class TechnicalSkill {
     @Id

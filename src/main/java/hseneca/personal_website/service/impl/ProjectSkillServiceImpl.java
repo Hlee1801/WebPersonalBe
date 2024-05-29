@@ -1,4 +1,4 @@
 package hseneca.personal_website.service.impl;
 
-public interface ContactServiceImpl {
+public interface ProjectSkillServiceImpl {
 }
