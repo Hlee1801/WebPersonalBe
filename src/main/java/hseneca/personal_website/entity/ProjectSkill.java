@@ -4,18 +4,19 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.ZonedDateTime;
 
 @Entity(name = "project_skill")
 @Data
-public class ProjectSkill {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer projectSkillId;
+@NoArgsConstructor
+@AllArgsConstructor
+@SuperBuilder
+public class ProjectSkill extends BaseEntity{
     private String techStackType;
 
-    private ZonedDateTime createAt;
-    private ZonedDateTime updateAt;
 }

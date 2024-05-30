@@ -1,23 +1,28 @@
 package hseneca.personal_website.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
+import lombok.experimental.SuperBuilder;
+import org.springframework.scheduling.config.Task;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity(name = "users")
 @Data
-public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer userId;
+@SuperBuilder
+public class User extends BaseEntity{
     private String userName;
     private Integer age;
     private String school;
 
-    private ZonedDateTime createAt;
-    private ZonedDateTime updateAt;
+    @OneToOne(mappedBy = "user")
+    private Contact contact;
+
+    @OneToMany(mappedBy = "user")
+    private List<Project> projects;
+
+    @OneToMany(mappedBy = "user")
+    private List<TechnicalSkill> technicalSkills;
+
 }

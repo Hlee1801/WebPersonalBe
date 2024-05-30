@@ -1,12 +1,10 @@
 package hseneca.personal_website.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.SuperBuilder;
 
 import java.time.ZonedDateTime;
 
@@ -14,17 +12,16 @@ import java.time.ZonedDateTime;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class Contact {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer contactId;
+@SuperBuilder
+public class Contact extends BaseEntity {
     private String github;
     private String instagram;
     private String facebook;
     private String linkedIn;
     private String phoneNumber;
 
-    private ZonedDateTime createAt;
-    private ZonedDateTime updateAt;
+    @OneToOne
+    @JoinColumn(name ="user_id")
+    private User user;
+
 }

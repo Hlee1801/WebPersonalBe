@@ -1,23 +1,18 @@
 package hseneca.personal_website.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.ZonedDateTime;
 
 @Entity(name = "projects")
 @Data
-public class Project {
+public class Project extends BaseEntity{
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer projectId;
     private String projectName;
     private String projectDescription;
 
-    private ZonedDateTime createAt;
-    private ZonedDateTime updateAt;
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
 }
