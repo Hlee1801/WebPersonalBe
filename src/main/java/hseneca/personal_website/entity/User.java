@@ -9,9 +9,10 @@ import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "users")
+@Entity
 @Data
 @SuperBuilder
+@Table(name = "users")
 public class User extends BaseEntity{
     private String userName;
     private String email;

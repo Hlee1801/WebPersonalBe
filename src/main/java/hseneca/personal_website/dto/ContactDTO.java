@@ -12,5 +12,4 @@ public class ContactDTO {
     private String facebook;
     private String linkedIn;
     private String phoneNumber;
-
 }

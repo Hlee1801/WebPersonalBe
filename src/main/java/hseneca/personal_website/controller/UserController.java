@@ -28,9 +28,8 @@ public class UserController {
             @RequestParam(required = false) String userName,
             @RequestParam(required = false) Integer age,
             @RequestParam(required = false) String school,
-            @RequestParam(required = false) Contact contact,
             @RequestParam(required = false) Pageable pageable) {
-        return userService.getUsers(userName, age, school, contact, pageable);
+        return userService.getUsers(userName, age, school, pageable);
     }
 
 //    @GetMapping("/id")

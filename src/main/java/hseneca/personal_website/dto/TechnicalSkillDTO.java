@@ -9,5 +9,4 @@ public class TechnicalSkillDTO {
     private Integer techSkillId;
     private String techSkillName;
     private String type;
-
 }

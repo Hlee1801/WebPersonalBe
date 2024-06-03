@@ -9,17 +9,20 @@ import hseneca.personal_website.model.request.UpdateUserRequest;
 import hseneca.personal_website.model.response.UserResponse;
 import hseneca.personal_website.repository.TechnicalSkillRepository;
 import hseneca.personal_website.repository.UserRepository;
-import hseneca.personal_website.service.impl.UserServiceImpl;
+import hseneca.personal_website.security.CustomUserDetail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
 @Service
-public class UserService implements UserServiceImpl {
+public class UserService implements UserDetailsService {
     @Autowired
     private UserRepository userRepository;
     @Autowired
@@ -49,8 +52,8 @@ public class UserService implements UserServiceImpl {
     }
 
     public Page<UserResponse> getUsers(String userName, Integer age, String school,
-                                       Contact contact, Pageable pageable) {
-        Page<User> users = UserRepository.findBy(userName, age, school, contact,pageable) ;
+                                        Pageable pageable) {
+        Page<User> users = userRepository.findBy(userName, age, school,pageable) ;
         return users.map(UserResponse::fromUser);
     }
 
@@ -61,6 +64,15 @@ public class UserService implements UserServiceImpl {
 
         User user = userRepository.findById(id).orElseThrow(() -> new CustomException("User not found", HttpStatus.NOT_FOUND));
         return UserResponse.fromUser(user);
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        User user = userRepository.findByUserName(username);
+        if (user == null) {
+            throw new UsernameNotFoundException(username);
+        }
+        return new CustomUserDetail(user);
     }
 }
 
