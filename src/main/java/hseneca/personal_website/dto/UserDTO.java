@@ -5,12 +5,9 @@ import lombok.Data;
 import java.time.ZonedDateTime;
 
 @Data
-public class UserDTO {
-    private Integer contactId;
-    private String github;
-    private String instagram;
-    private String facebook;
-    private String linkedIn;
-    private String phoneNumber;
-
+public class UserDTO extends BaseDTO{
+    private String username;
+    private String password;
+    private Integer age;
+    private String school;
 }

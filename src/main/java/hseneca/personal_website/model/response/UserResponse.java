@@ -16,7 +16,7 @@ public class UserResponse {
     private Integer age;
     private String school;
 
-    public static UserResponse from(User user) {
+    public static UserResponse fromUser(User user) {
         return UserResponse.builder()
                 .id(user.getId())
                 .userName(user.getUserName())

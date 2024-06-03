@@ -7,6 +7,7 @@ import hseneca.personal_website.service.impl.ContactServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,5 +22,6 @@ public class ContactService implements ContactServiceImpl {
 //    @Qualifier("conversionService")
     @Autowired
     private ConversionService conversionService;
+
 }
 
