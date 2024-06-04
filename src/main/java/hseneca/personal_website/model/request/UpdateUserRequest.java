@@ -1,6 +1,7 @@
 package hseneca.personal_website.model.request;
 
 import hseneca.personal_website.entity.Contact;
+import hseneca.personal_website.entity.Project;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -14,10 +15,12 @@ import java.util.List;
 @Builder
 public class UpdateUserRequest {
     private String userName;
+    private String password;
     private Integer age;
     private String school;
 
-    private List<Contact> contacts;
+    private List<Project> projects;
     private List<Long> technicalSkills;
+    private Contact contact;
 
 }

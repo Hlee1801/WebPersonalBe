@@ -1,6 +1,7 @@
 package hseneca.personal_website.model.request;
 
 import hseneca.personal_website.entity.Contact;
+import hseneca.personal_website.entity.Project;
 import hseneca.personal_website.entity.TechnicalSkill;
 import hseneca.personal_website.entity.User;
 import jakarta.validation.constraints.NotBlank;
@@ -24,8 +25,9 @@ public class CreateUserRequest {
     @NotBlank
     private String school;
 
-    private List<Contact> contacts;
+    private Contact contacts;
     private List<Long> technicalSkills;
+    private List<Project> projects;
 
     public User toUser() {
         return User.builder()

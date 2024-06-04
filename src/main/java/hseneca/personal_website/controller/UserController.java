@@ -2,6 +2,7 @@ package hseneca.personal_website.controller;
 
 import hseneca.personal_website.entity.Contact;
 import hseneca.personal_website.model.request.CreateUserRequest;
+import hseneca.personal_website.model.request.UpdateUserRequest;
 import hseneca.personal_website.model.response.UserResponse;
 import hseneca.personal_website.service.UserService;
 import jakarta.validation.Valid;
@@ -23,6 +24,11 @@ public class UserController {
         return userService.createUser(request);
     }
 
+    @PutMapping
+    public UserResponse updateUser(@PathVariable Long id,@RequestBody @Valid UpdateUserRequest request) {
+        return userService.updateUser(id,request);
+    }
+
     @GetMapping
     public Page<UserResponse> getAllUsers(
             @RequestParam(required = false) String userName,
@@ -32,10 +38,10 @@ public class UserController {
         return userService.getUsers(userName, age, school, pageable);
     }
 
-//    @GetMapping("/id")
-//    public UserResponse getUserById(@PathVariable Long id) {
-//        return
-//    }
+    @GetMapping("/id")
+    public UserResponse getUserById(@PathVariable Long id) {
+        return userService.getUser(id);
+    }
 
 
 
