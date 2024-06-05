@@ -44,7 +44,6 @@ public class LoginController {
                         loginRequest.getPassword()
                 )
         );
-
         // Nếu không xảy ra exception tức là thông tin hợp lệ
         // Set thông tin authentication vào Security Context
         SecurityContextHolder.getContext().setAuthentication(authentication);
@@ -52,6 +51,12 @@ public class LoginController {
         // Trả về jwt cho người dùng.
         String jwt = tokenProvider.generateToken((CustomUserDetail) authentication.getPrincipal());
         return new LoginResponse(jwt);
+    }
+    @PostMapping("/signup")
+    public ResponseEntity<?> signup(@RequestBody SignupRequest signUpRequest){
+        ResponseData responseData= new ResponseData();
+        responseData.setData(loginService.addUser(signUpRequest));
+        return new ResponseEntity<>(responseData, HttpStatus.OK);
     }
 
 //    // Api /api/random yêu cầu phải xác thực mới có thể request
@@ -95,12 +100,7 @@ public class LoginController {
 ////        }
 ////        return new ResponseEntity<>(responseData, HttpStatus.OK);
 ////    }
-    @PostMapping("/signup")
-    public ResponseEntity<?> signup(@RequestBody SignupRequest signUpRequest){
-        ResponseData responseData= new ResponseData();
-        responseData.setData(loginService.addUser(signUpRequest));
-        return new ResponseEntity<>(responseData, HttpStatus.OK);
-    }
+
 
 
 }

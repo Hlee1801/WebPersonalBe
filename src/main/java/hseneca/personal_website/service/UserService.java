@@ -23,6 +23,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -38,17 +39,14 @@ public class UserService implements UserDetailsService {
     public UserResponse createUser(CreateUserRequest createUserRequest){
         List<TechnicalSkill> technicalSkills = technicalSkillRepository.findByIdIn(createUserRequest.getTechnicalSkills());
         List<Project> projects = projectRepository.findByIdIn(createUserRequest.getProjects());
-        Contact contacts = contactRepository.findByIdIn(createUserRequest.getContacts());
 
         User user = createUserRequest.toUser();
         user.setTechnicalSkills(technicalSkills);
         user.setProjects(projects);
-        user.setContact(contacts);
         User saveUser = userRepository.save(user);
 
         projectRepository.saveAll(projects.stream().peek(s ->s.setUser(saveUser)).toList());
         technicalSkillRepository.saveAll(technicalSkills.stream().peek(s ->s.setUser(saveUser)).toList());
-        contactRepository.save(contacts);
 
         return UserResponse.fromUser(saveUser);
     }
@@ -57,7 +55,6 @@ public class UserService implements UserDetailsService {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         List<TechnicalSkill> technicalSkills = technicalSkillRepository.findByIdIn(updateUserRequest.getTechnicalSkills());
         List<Project> projects = projectRepository.findByIdIn(updateUserRequest.getProjects());
-        Contact contacts = contactRepository.findByIdIn(updateUserRequest.getContact());
 
         user.setUserName(updateUserRequest.getUserName());
         user.setPassword(updateUserRequest.getPassword());

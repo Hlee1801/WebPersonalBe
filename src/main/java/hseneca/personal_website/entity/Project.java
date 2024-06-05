@@ -6,9 +6,10 @@ import lombok.experimental.SuperBuilder;
 
 import java.time.ZonedDateTime;
 
-@Entity(name = "projects")
+@Entity
 @Data
 @SuperBuilder
+@Table(name = "projects")
 public class Project extends BaseEntity{
 
     private String projectName;

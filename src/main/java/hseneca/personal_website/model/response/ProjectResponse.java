@@ -15,7 +15,7 @@ public class ProjectResponse {
     private String projectName;
     private String projectDescription;
 
-    public static ProjectResponse fromJson(Project project) {
+    public static ProjectResponse fromProject(Project project) {
         return ProjectResponse.builder()
                 .id(project.getId())
                 .projectName(project.getProjectName())

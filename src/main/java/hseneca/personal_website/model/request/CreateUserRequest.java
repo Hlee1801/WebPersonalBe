@@ -11,6 +11,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.Collection;
 import java.util.List;
 
 @Data
@@ -25,7 +26,7 @@ public class CreateUserRequest {
     @NotBlank
     private String school;
 
-    private Contact contacts;
+    private List<Contact> contacts;
     private List<Long> technicalSkills;
     private List<Project> projects;
 

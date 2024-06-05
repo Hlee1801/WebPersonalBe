@@ -1,5 +1,6 @@
 package hseneca.personal_website.entity;
 
+import hseneca.personal_website.enums.TechnicalSkillType;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,7 +11,8 @@ import java.time.ZonedDateTime;
 public class TechnicalSkill extends BaseEntity {
 
     private String techSkillName;
-    private String type;
+    @Enumerated(EnumType.STRING)
+    private TechnicalSkillType techSkillType;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

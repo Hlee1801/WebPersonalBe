@@ -9,17 +9,18 @@ import lombok.experimental.SuperBuilder;
 import java.time.ZonedDateTime;
 import java.util.Queue;
 
-@Entity(name = "contacts")
+@Entity
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @SuperBuilder
+@Table(name = "contacts")
 public class Contact extends BaseEntity {
     private String github;
     private String instagram;
     private String facebook;
     private String linkedIn;
-    private Long phoneNumber;
+    private String phoneNumber;
 
     @OneToOne
     @JoinColumn(name ="user_id")

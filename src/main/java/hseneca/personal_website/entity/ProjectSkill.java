@@ -17,6 +17,7 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @SuperBuilder
 public class ProjectSkill extends BaseEntity{
+    private String projectName;
     private String techStackType;
 
 }

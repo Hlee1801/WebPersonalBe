@@ -9,10 +9,8 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UpdateContactRequest {
-    private String facebook;
-    private String github;
-    private String instagram;
-    private String linkIn;
-    private String phoneNumber;
+public class UpdateProjectRequest {
+    private Long id;
+    private String projectName;
+    private String projectDescription;
 }

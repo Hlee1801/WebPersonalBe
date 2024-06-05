@@ -27,7 +27,7 @@ public class ContactService implements ContactServiceImpl {
     }
 
     public ContactResponse updateContact(Long id,UpdateContactRequest updateContactRequest) {
-        Contact contact = contactRepository.findById(id).orElseThrow(()->new RuntimeException("User not found"));
+        Contact contact = contactRepository.findById(id).orElseThrow(()->new RuntimeException("Contact not found"));
 
         contact.setFacebook(contact.getFacebook());
         contact.setInstagram(contact.getInstagram());
@@ -41,6 +41,7 @@ public class ContactService implements ContactServiceImpl {
 
 
     public Optional<Contact> getContact(Long id) {
+
         return contactRepository.findById(id);
     }
 
