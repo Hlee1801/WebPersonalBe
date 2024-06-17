@@ -36,7 +36,6 @@ public class User extends BaseEntity{
     public User() {
 
     }
-
     public User(String username, String password, ArrayList<Object> objects) {
     }
 }

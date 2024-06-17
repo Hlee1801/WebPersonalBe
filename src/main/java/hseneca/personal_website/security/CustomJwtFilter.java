@@ -42,7 +42,7 @@ public class CustomJwtFilter extends OncePerRequestFilter {
 //            System.out.println("Hello filter:  " + isSuccess);
 
         } catch (Exception e) {
-//            System.err.println("Lỗi nhận token - " + e.getMessage());
+            System.err.println("Lỗi nhận token - " + e.getMessage());
         }
 
         filterChain.doFilter(request, response);

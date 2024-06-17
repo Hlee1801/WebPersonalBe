@@ -5,9 +5,11 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
-@Entity(name = "technical_skill")
+@Entity
 @Data
+@Table(name = "technical_skill")
 public class TechnicalSkill extends BaseEntity {
 
     private String techSkillName;

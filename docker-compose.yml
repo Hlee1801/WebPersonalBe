@@ -1,7 +1,6 @@
 version: '3.8'
 
 services:
-
   kafka:
     image: bitnami/kafka:3.4
     hostname: kafka
@@ -29,6 +28,26 @@ services:
     environment:
       KAFKA_CLUSTERS_0_NAME: local
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:9094
+
+  postgres:
+    image: postgres:latest
+    container_name: postgres_container
+    environment:
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: root
+      POSTGRES_DB: Hoang
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+#    env_file:
+#      - .env
+
+volumes:
+  postgres_data:
+
+
+
 
 #
 #version: '3.8'

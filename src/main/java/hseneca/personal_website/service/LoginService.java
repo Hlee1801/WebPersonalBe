@@ -51,7 +51,7 @@ public class LoginService implements LoginServiceImpl {
 //    }
 
 
-    @Override
+//    @Override
     public boolean addUser(SignupRequest singupRequest) {
         Role role = new Role();
         role.setId(singupRequest.getRoleid());

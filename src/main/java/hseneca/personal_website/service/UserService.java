@@ -1,6 +1,5 @@
 package hseneca.personal_website.service;
 
-import hseneca.personal_website.entity.Contact;
 import hseneca.personal_website.entity.Project;
 import hseneca.personal_website.entity.TechnicalSkill;
 import hseneca.personal_website.entity.User;
@@ -22,6 +21,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
 
