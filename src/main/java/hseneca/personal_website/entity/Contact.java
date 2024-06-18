@@ -20,7 +20,7 @@ public class Contact extends BaseEntity {
     private String instagram;
     private String facebook;
     private String linkedIn;
-    private String phoneNumber;
+    private Integer phoneNumber;
 
     @OneToOne
     @JoinColumn(name ="user_id")

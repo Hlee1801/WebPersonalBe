@@ -20,7 +20,7 @@ public class User extends BaseEntity{
     private Integer age;
     private String school;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
     private Contact contact;
 
     @OneToMany(mappedBy = "user")

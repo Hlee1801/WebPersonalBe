@@ -22,7 +22,7 @@ public class CreateContactRequest {
     @NotBlank
     private String linkIn;
     @NotNull
-    private String phoneNumber;
+    private Integer phoneNumber;
 
     public Contact toContact(){
         return Contact.builder()

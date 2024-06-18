@@ -17,7 +17,7 @@ public class ContactResponse {
     private String github;
     private String instagram;
     private String linkedIn;
-    private String phone_number;
+    private Integer phone_number;
 
     public static ContactResponse fromCotact(Contact contact) {
             return ContactResponse.builder()
