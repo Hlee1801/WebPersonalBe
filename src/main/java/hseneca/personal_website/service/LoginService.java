@@ -1,7 +1,7 @@
 package hseneca.personal_website.service;
 
 
-import a8seneca.test.dto.UserDTO;
+import hseneca.personal_website.dto.UserDTO;
 import hseneca.personal_website.entity.Role;
 import hseneca.personal_website.entity.User;
 import hseneca.personal_website.model.request.SignupRequest;

@@ -1,7 +1,8 @@
 package hseneca.personal_website.service.impl;
 
 
-import a8seneca.test.dto.UserDTO;
+
+import hseneca.personal_website.dto.UserDTO;
 import hseneca.personal_website.model.request.SignupRequest;
 
 import java.util.List;
