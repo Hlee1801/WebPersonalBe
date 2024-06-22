@@ -35,7 +35,7 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(auth -> auth.requestMatchers("/login/**","/login","/login/signup/**","/producer-app/publish/**","/send-otp/**").permitAll())
+                .authorizeHttpRequests(auth -> auth.requestMatchers("/login/**","/login","/login/*","/login/signup/**","/producer-app/publish/**","/send-otp/**").permitAll())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/user/**", "/user").authenticated())
                 .authorizeHttpRequests(auth -> auth.requestMatchers("/auth/admin/**").authenticated())
                 .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))

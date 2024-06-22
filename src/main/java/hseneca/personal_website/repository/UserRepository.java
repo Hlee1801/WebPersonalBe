@@ -12,7 +12,17 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
+    @Query("SELECT COUNT(u) FROM User u")
+    long countUsers();
+
+    @Query("SELECT AVG(u.age) FROM User u")
+    double averageAge();
+
+    @Query("SELECT STDDEV(u.age) FROM User u")
+    double ageStandardDeviation();
+
     User findByUserName(String userName);
+
 
     @Query("SELECT u FROM User u WHERE " +
             "(:name IS NULL OR :name = '' OR u.userName = :name) AND " +
