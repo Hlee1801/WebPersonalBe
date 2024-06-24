@@ -2,6 +2,8 @@ package hseneca.personal_website.security;
 
 import hseneca.personal_website.entity.User;
 import hseneca.personal_website.utils.JwtTokenProvider;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -31,7 +33,6 @@ public class CustomJwtFilter extends OncePerRequestFilter {
             if (isSuccess) {
 //                String data = jwtUtilsHelper.getDataFromToken(jwt);
                 Long userId = jwtUtilsHelper.getUserIdFromJWT(jwt);
-
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                         new CustomUserDetail(User.builder().id(userId).build()),
                         null, List.of());
@@ -58,4 +59,5 @@ public class CustomJwtFilter extends OncePerRequestFilter {
         return token;
 
     }
+
 }

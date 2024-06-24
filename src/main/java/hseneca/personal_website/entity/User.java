@@ -1,20 +1,20 @@
 package hseneca.personal_website.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import lombok.experimental.SuperBuilder;
-import org.springframework.scheduling.config.Task;
 
-import java.io.Serializable;
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Data
 @SuperBuilder
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "users")
-public class User extends BaseEntity{
+public class User extends BaseEntity {
     private String userName;
     private String email;
     private String password;
@@ -34,9 +34,4 @@ public class User extends BaseEntity{
     @JoinColumn(name = "role_id")
     private Role roles;
 
-    public User() {
-
-    }
-    public User(String username, String password, ArrayList<Object> objects) {
-    }
 }
