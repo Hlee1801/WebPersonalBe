@@ -1,5 +1,6 @@
 package hseneca.personal_website.config;
 
+import org.hibernate.validator.internal.constraintvalidators.hv.time.DurationMaxValidator;
 import org.springframework.boot.autoconfigure.cache.RedisCacheManagerBuilderCustomizer;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
@@ -38,8 +39,9 @@ public class RedisConfig {
     }
 
     @Bean
-    public CacheManager cacheManager(RedisConnectionFactory connectionFactory) {
+    public CacheManager cacheManager(RedisConnectionFactory connectionFactory ) {
         RedisCacheConfiguration config = RedisCacheConfiguration.defaultCacheConfig()
+//                .entryTtl(Duration.ofDays(1))
                 .serializeKeysWith(RedisSerializationContext.SerializationPair.fromSerializer(new StringRedisSerializer()))
                 .serializeValuesWith(RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer()));
         return RedisCacheManager.builder(connectionFactory).cacheDefaults(config).build();

@@ -12,8 +12,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.Trigger;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -43,10 +45,15 @@ public class UserController {
         return userService.getUsers(userName, age, school, pageable);
     }
 
-//    @GetMapping("/{username}")
-//    public User getUserByUsername(@PathVariable String username) {
-//        return userService.getUserByUsername(username);
-//    }
+    @GetMapping("/hi/{username}")
+    public UserResponse getUserByUsername(@PathVariable String username) {
+        return userService.getUserByUsername(username);
+    }
+
+    @GetMapping("/ba/{email}")
+    public UserResponse getUserByEmail(@PathVariable String email) {
+        return userService.getUserByEmail(email);
+    }
 
     @GetMapping("/{id}")
     public UserResponse getUserById(@PathVariable Long id) {
@@ -59,11 +66,17 @@ public class UserController {
         return ResponseEntity.ok("Password updated");
     }
 
-    @GetMapping("/age-statistics")
-    public ResponseEntity<Map<String, Long>> getUserAgeStatistics() {
-        Map<String, Long> ageStatistics = userService.countUsersByAgeRanges();
-        return ResponseEntity.ok(ageStatistics);
+//    @GetMapping("/age-statistics")
+//    public ResponseEntity<Map<String, Long>> getUserAgeStatistics() {
+//        Map<String, Long> ageStatistics = userService.countUsersByAgeRanges();
+//        return ResponseEntity.ok(ageStatistics);
+//    }
+
+    @GetMapping("age-groups")
+    public List<Object[]> getAgeGroups() {
+        return userService.countUsersByAgeGroup();
     }
+
     @GetMapping("/count")
     public long countUsers() {
         return userService.countUsers();

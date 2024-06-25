@@ -9,6 +9,8 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
@@ -22,10 +24,30 @@ public interface UserRepository extends JpaRepository<User, Long> {
     @Query("SELECT STDDEV(u.age) FROM User u")
     double ageStandardDeviation();
 
-    User findByUserName(String userName);
+    @Query(value =
+            "SELECT " +
+                    "  CASE " +
+                    "    WHEN u.age >= 0 AND u.age < 10 THEN '0-9' " +
+                    "    WHEN u.age >= 10 AND u.age < 20 THEN '10-19' " +
+                    "    WHEN u.age >= 20 AND u.age < 30 THEN '20-29' " +
+                    "    WHEN u.age >= 30 AND u.age < 40 THEN '30-39' " +
+                    "    WHEN u.age >= 40 AND u.age < 50 THEN '40-49' " +
+                    "    WHEN u.age >= 50 AND u.age < 60 THEN '50-59' " +
+                    "    WHEN u.age >= 60 AND u.age < 70 THEN '60-69' " +
+                    "    ELSE '70+' " +
+                    "  END AS ageGroup, " +
+                    "  COUNT(u) " +
+                    "FROM User u " +
+                    "GROUP BY ageGroup " +
+                    "ORDER BY MIN(u.age)")
+    List<Object[]> countUsersByAgeGroup();
 
-    @Query("SELECT COUNT(u) FROM User u WHERE u.age >= :startAge AND u.age <= :endAge")
-    Long countUsersByAgeRange(@Param("startAge") Integer startAge, @Param("endAge") Integer endAge);
+
+    User findByUserName(String userName);
+    User findByEmail(String email);
+
+//    @Query("SELECT COUNT(u) FROM User u WHERE u.age >= :startAge AND u.age <= :endAge")
+//    Long countUsersByAgeRange(@Param("startAge") Integer startAge, @Param("endAge") Integer endAge);
 
 
     @Query("SELECT u FROM User u WHERE " +

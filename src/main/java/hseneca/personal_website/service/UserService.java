@@ -18,6 +18,7 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -25,9 +26,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 
 @Service
@@ -64,8 +63,6 @@ public class UserService implements UserDetailsService {
 
     public UserResponse updateUser(Long id, UpdateUserRequest updateUserRequest) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
-        List<TechnicalSkill> technicalSkills = technicalSkillRepository.findByIdIn(updateUserRequest.getTechnicalSkills());
-        List<Project> projects = projectRepository.findByIdIn(updateUserRequest.getProjects());
 
         user.setUserName(updateUserRequest.getUserName());
         user.setPassword(updateUserRequest.getPassword());
@@ -81,15 +78,20 @@ public class UserService implements UserDetailsService {
         return users.map(UserResponse::fromUser);
     }
 
-//    @Cacheable(value = "userCache", key = "'getUserByUsername_' + #username")
-    @Cacheable(value = "userCache", key = "#username")
-    public User getUserByUsername(String username) {
-        return userRepository.findByUserName(username);
+//    @Cacheable(value = "userCache", key = "#username")
+    public UserResponse getUserByUsername(String username) {
+        User user = userRepository.findByUserName(username);
+        return UserResponse.fromUser(user);
     }
 
-    @Cacheable(value = "userCache", key = "#id")
+    @Cacheable(value = "userCache", key = "#id" )
     public UserResponse getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+        return UserResponse.fromUser(user);
+    }
+
+    public UserResponse getUserByEmail(String email) {
+        User user = userRepository.findByEmail(email);
         return UserResponse.fromUser(user);
     }
 
@@ -107,25 +109,10 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
-    @Cacheable(value = "user", key = "'ageRanges'")
-    public Map<String, Long> countUsersByAgeRanges() {
-        Map<String, Long> ageRangeCounts = new LinkedHashMap<>();
 
-        int[] ageRanges = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-
-        for (int i = 0; i < ageRanges.length - 1; i++) {
-            Integer startAge = ageRanges[i];
-            Integer endAge = ageRanges[i + 1] - 1;
-            String rangeLabel = startAge + "-" + endAge;
-
-            Long count = userRepository.countUsersByAgeRange(startAge, endAge);
-            ageRangeCounts.put(rangeLabel, count);
-        }
-        return ageRangeCounts;
-    }
 
     @CachePut(value = "updatePassword", key = "#newPassword")
-    public String updatePassword(Long id, UpdatePasswordRequest updatePasswordRequest, String newPassword) {
+    public UserResponse updatePassword(Long id, UpdatePasswordRequest updatePasswordRequest, String newPassword) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
         String decodePassword = updatePasswordRequest.getOldPassword();
@@ -135,9 +122,38 @@ public class UserService implements UserDetailsService {
         }
 
         user.setPassword(passwordEncoder.encode(updatePasswordRequest.getNewPassword()));
-//        return userRepository.save(user);
-        return newPassword;
+        return UserResponse.fromUser(user);
+//        return newPassword;
     }
+
+    @Cacheable(value = "user")
+    @Scheduled(fixedRate = 360000)
+    @Transactional(readOnly = true)
+    public List<Object[]> countUsersByAgeGroup() {
+        return userRepository.countUsersByAgeGroup();
+    }
+
+
+
+
+//    public Map<String, Long> countUsersByAgeRanges() {
+//        Map<String, Long> ageRangeCounts = new LinkedHashMap<>();
+//
+//        int[] ageRanges = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
+//
+//        for (int i = 0; i < ageRanges.length - 1; i++) {
+//            Integer startAge = ageRanges[i];
+//            Integer endAge = ageRanges[i + 1] - 1;
+//            String rangeLabel = startAge + "-" + endAge;
+//
+//            Long count = userRepository.countUsersByAgeRange(startAge, endAge);
+//            ageRangeCounts.put(rangeLabel, count);
+//        }
+//        return ageRangeCounts;
+//    }
+
+
+
 
     @Transactional(readOnly = true)
     public long countUsers() {
