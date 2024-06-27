@@ -24,4 +24,10 @@ public class UserResponse {
                 .school(user.getSchool())
                 .build();
     }
+    public static UserResponse forIdName(User user) {
+        return UserResponse.builder()
+                .id(user.getId())
+                .userName(user.getUserName())
+                .build();
+    }
 }

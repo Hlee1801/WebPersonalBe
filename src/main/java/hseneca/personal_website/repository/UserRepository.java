@@ -1,12 +1,11 @@
 package hseneca.personal_website.repository;
 
-import hseneca.personal_website.entity.Contact;
+import hseneca.personal_website.model.request.AgeGroupStats;
 import hseneca.personal_website.entity.User;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -36,11 +35,11 @@ public interface UserRepository extends JpaRepository<User, Long> {
                     "    WHEN u.age >= 60 AND u.age < 70 THEN '60-69' " +
                     "    ELSE '70+' " +
                     "  END AS ageGroup, " +
-                    "  COUNT(u) " +
+                    "  COUNT(u) AS total " +
                     "FROM User u " +
                     "GROUP BY ageGroup " +
-                    "ORDER BY MIN(u.age)")
-    List<Object[]> countUsersByAgeGroup();
+                    "ORDER BY ageGroup")
+    List<AgeGroupStats> countUsersByAgeGroup();
 
 
     User findByUserName(String userName);

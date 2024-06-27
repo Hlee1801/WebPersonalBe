@@ -1,6 +1,6 @@
 package hseneca.personal_website.controller;
 
-import hseneca.personal_website.entity.User;
+import hseneca.personal_website.model.request.AgeGroupStatsDto;
 import hseneca.personal_website.model.request.CreateUserRequest;
 import hseneca.personal_website.model.request.UpdatePasswordRequest;
 import hseneca.personal_website.model.request.UpdateUserRequest;
@@ -12,11 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
-import org.springframework.scheduling.Trigger;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/user")
@@ -31,7 +29,7 @@ public class UserController {
         return userService.createUser(request);
     }
 
-    @PutMapping
+    @PutMapping("/update/{id}")
     public UserResponse updateUser(@PathVariable Long id,@RequestBody @Valid UpdateUserRequest request) {
         return userService.updateUser(id,request);
     }
@@ -43,6 +41,12 @@ public class UserController {
             @RequestParam(required = false) String school,
             @RequestParam(required = false) Pageable pageable) {
         return userService.getUsers(userName, age, school, pageable);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(@PathVariable Long id) {
+        userService.deleteById(id);
+        return ResponseEntity.ok("delete success");
     }
 
     @GetMapping("/hi/{username}")
@@ -73,7 +77,7 @@ public class UserController {
 //    }
 
     @GetMapping("age-groups")
-    public List<Object[]> getAgeGroups() {
+    public List<AgeGroupStatsDto> getAgeGroups() {
         return userService.countUsersByAgeGroup();
     }
 

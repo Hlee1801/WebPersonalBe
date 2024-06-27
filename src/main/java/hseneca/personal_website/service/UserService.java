@@ -1,5 +1,7 @@
 package hseneca.personal_website.service;
 
+import hseneca.personal_website.model.request.AgeGroupStats;
+import hseneca.personal_website.model.request.AgeGroupStatsDto;
 import hseneca.personal_website.entity.Project;
 import hseneca.personal_website.entity.TechnicalSkill;
 import hseneca.personal_website.entity.User;
@@ -27,6 +29,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 @Service
@@ -46,7 +49,7 @@ public class UserService implements UserDetailsService {
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
 
-    public UserResponse createUser(CreateUserRequest createUserRequest){
+    public UserResponse createUser(CreateUserRequest createUserRequest) {
         List<TechnicalSkill> technicalSkills = technicalSkillRepository.findByIdIn(createUserRequest.getTechnicalSkills());
         List<Project> projects = projectRepository.findByIdIn(createUserRequest.getProjects());
 
@@ -55,12 +58,13 @@ public class UserService implements UserDetailsService {
         user.setProjects(projects);
         User saveUser = userRepository.save(user);
 
-        projectRepository.saveAll(projects.stream().peek(s ->s.setUser(saveUser)).toList());
-        technicalSkillRepository.saveAll(technicalSkills.stream().peek(s ->s.setUser(saveUser)).toList());
+        projectRepository.saveAll(projects.stream().peek(s -> s.setUser(saveUser)).toList());
+        technicalSkillRepository.saveAll(technicalSkills.stream().peek(s -> s.setUser(saveUser)).toList());
 
         return UserResponse.fromUser(saveUser);
     }
 
+    @Cacheable(value = "update", key = "#id")
     public UserResponse updateUser(Long id, UpdateUserRequest updateUserRequest) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
@@ -75,16 +79,18 @@ public class UserService implements UserDetailsService {
 
     public Page<UserResponse> getUsers(String userName, Integer age, String school, Pageable pageable) {
         Page<User> users = userRepository.findBy(userName, age, school, pageable);
-        return users.map(UserResponse::fromUser);
+        return users.map(user -> {
+            return UserResponse.fromUser(user);
+        });
     }
 
-//    @Cacheable(value = "userCache", key = "#username")
+    //    @Cacheable(value = "userCache", key = "#username")
     public UserResponse getUserByUsername(String username) {
         User user = userRepository.findByUserName(username);
         return UserResponse.fromUser(user);
     }
 
-    @Cacheable(value = "userCache", key = "#id" )
+    @CachePut(value = "userCache", key = "#id", cacheManager = "userCacheManager")
     public UserResponse getUserById(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
         return UserResponse.fromUser(user);
@@ -109,15 +115,13 @@ public class UserService implements UserDetailsService {
         userRepository.deleteById(id);
     }
 
-
-
-    @CachePut(value = "updatePassword", key = "#newPassword")
+    @CachePut(value = "updatePassword", key = "#newPassword", cacheManager = "pwCacheManager")
     public UserResponse updatePassword(Long id, UpdatePasswordRequest updatePasswordRequest, String newPassword) {
         User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
 
         String decodePassword = updatePasswordRequest.getOldPassword();
 
-        if(!passwordEncoder.matches(decodePassword, user.getPassword())) {
+        if (!passwordEncoder.matches(decodePassword, user.getPassword())) {
             throw new RuntimeException("Old password does not match with Database");
         }
 
@@ -127,33 +131,17 @@ public class UserService implements UserDetailsService {
     }
 
     @Cacheable(value = "user")
-    @Scheduled(fixedRate = 360000)
+    @Scheduled(fixedRate = 300000)
     @Transactional(readOnly = true)
-    public List<Object[]> countUsersByAgeGroup() {
-        return userRepository.countUsersByAgeGroup();
+    public List<AgeGroupStatsDto> countUsersByAgeGroup() {
+        List<AgeGroupStats> ageGroupStats = userRepository.countUsersByAgeGroup();
+        return ageGroupStats.stream().map(AgeGroupStatsDto::from).collect(Collectors.toList());
     }
 
-
-
-
-//    public Map<String, Long> countUsersByAgeRanges() {
-//        Map<String, Long> ageRangeCounts = new LinkedHashMap<>();
-//
-//        int[] ageRanges = {0, 10, 20, 30, 40, 50, 60, 70, 80, 90, 100};
-//
-//        for (int i = 0; i < ageRanges.length - 1; i++) {
-//            Integer startAge = ageRanges[i];
-//            Integer endAge = ageRanges[i + 1] - 1;
-//            String rangeLabel = startAge + "-" + endAge;
-//
-//            Long count = userRepository.countUsersByAgeRange(startAge, endAge);
-//            ageRangeCounts.put(rangeLabel, count);
-//        }
-//        return ageRangeCounts;
-//    }
-
-
-
+    @Scheduled(fixedRate = 2000)
+    void test(){
+        System.out.println("hello");
+    }
 
     @Transactional(readOnly = true)
     public long countUsers() {
