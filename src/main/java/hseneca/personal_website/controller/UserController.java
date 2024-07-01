@@ -12,10 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 @RestController
 @RequestMapping("/user")
@@ -72,20 +76,27 @@ public class UserController {
     }
 
     @GetMapping("/stats")
+    @Async
     public SseEmitter getUserStats() {
         SseEmitter emitter = new SseEmitter();
         new Thread(() -> {
             try {
                 while (true) {
-                    List<AgeGroupStatsDto> stats = userService.countUsersByAgeGroup();
+                    List<AgeGroupStatsDto> stats = new ArrayList<>();
+                    stats.add(new AgeGroupStatsDto("70", new Random().nextInt(100000)));
                     emitter.send(stats);
-                    Thread.sleep(10000);
+                    Thread.sleep(1000);
                 }
             }catch (Exception e){
                 emitter.completeWithError(e);
             }
         }).start();
         return emitter;
+    }
+
+    @GetMapping("/stats1")
+    public SseEmitter getSseEmitter() {
+        return userService.addEmitter();
     }
 
     @GetMapping("age-groups")

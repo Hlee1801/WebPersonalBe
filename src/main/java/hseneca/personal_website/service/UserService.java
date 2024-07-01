@@ -27,8 +27,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.stream.Collectors;
 
 
@@ -48,6 +52,8 @@ public class UserService implements UserDetailsService {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private JwtTokenProvider jwtTokenProvider;
+
+    private List<SseEmitter> emitters = new CopyOnWriteArrayList<SseEmitter>();
 
     public UserResponse createUser(CreateUserRequest createUserRequest) {
         List<TechnicalSkill> technicalSkills = technicalSkillRepository.findByIdIn(createUserRequest.getTechnicalSkills());
@@ -157,6 +163,31 @@ public class UserService implements UserDetailsService {
     public double ageStandardDeviation() {
         return userRepository.ageStandardDeviation();
     }
+
+
+    public SseEmitter addEmitter() {
+        SseEmitter emitter = new SseEmitter();
+        emitters.add(emitter);
+        emitter.onCompletion(() -> emitters.remove(emitter));
+        emitter.onTimeout(() -> emitters.remove(emitter));
+        emitter.onError((e) -> emitters.remove(emitter));
+        return emitter;
+    }
+//    @Scheduled(fixedRate = 10000)
+//    public void sendEven(){
+//        List<SseEmitter> deadEmitters = new ArrayList<>();
+//        List<AgeGroupStatsDto> stats = countUsersByAgeGroup();
+//        for (SseEmitter emitter : emitters) {
+//            try {
+//                emitter.send(SseEmitter.event().name("stats").data(stats));
+//            }catch (IOException e){
+//                emitter.complete();
+//                deadEmitters.add(emitter);
+//            }
+//        }
+//        emitters.removeAll(deadEmitters);
+//    }
+
 }
 
 
