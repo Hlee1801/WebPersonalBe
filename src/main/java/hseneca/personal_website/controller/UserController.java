@@ -13,6 +13,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import java.util.List;
 
@@ -70,11 +71,22 @@ public class UserController {
         return ResponseEntity.ok("Password updated");
     }
 
-//    @GetMapping("/age-statistics")
-//    public ResponseEntity<Map<String, Long>> getUserAgeStatistics() {
-//        Map<String, Long> ageStatistics = userService.countUsersByAgeRanges();
-//        return ResponseEntity.ok(ageStatistics);
-//    }
+    @GetMapping("/stats")
+    public SseEmitter getUserStats() {
+        SseEmitter emitter = new SseEmitter();
+        new Thread(() -> {
+            try {
+                while (true) {
+                    List<AgeGroupStatsDto> stats = userService.countUsersByAgeGroup();
+                    emitter.send(stats);
+                    Thread.sleep(10000);
+                }
+            }catch (Exception e){
+                emitter.completeWithError(e);
+            }
+        }).start();
+        return emitter;
+    }
 
     @GetMapping("age-groups")
     public List<AgeGroupStatsDto> getAgeGroups() {

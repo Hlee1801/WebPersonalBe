@@ -138,10 +138,10 @@ public class UserService implements UserDetailsService {
         return ageGroupStats.stream().map(AgeGroupStatsDto::from).collect(Collectors.toList());
     }
 
-    @Scheduled(fixedRate = 2000)
-    void test(){
-        System.out.println("hello");
-    }
+//    @Scheduled(fixedRate = 2000)
+//    void test(){
+//        System.out.println("hello");
+//    }
 
     @Transactional(readOnly = true)
     public long countUsers() {
